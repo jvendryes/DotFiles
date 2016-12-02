@@ -1,6 +1,9 @@
 " Automatically source .vimrc on save
 autocmd! BufWritePost ~/.vimrc nested :source ~/.vimrc
 
+" Disable automatically adding comments on new lines
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 " General configuration
 set nocompatible                    " Ensure enhancements are turned on
 set t_Co=256                        " Force 256 colors in terminal
@@ -12,9 +15,10 @@ set matchpairs=(:),{:},[:]          " Define characters for 'showmatch'
 set undolevels=1000                 " Define the maximum number of changes that can be undone
 set title                           " Title of the window set to value of 'titlestring'
 set cursorline                      " Highlight the line the cursor is on
+set nowrap                          " Disable automatic wrapping
+set textwidth=0                     " Disable 'textwidth'
 syntax on                           " Enable syntax highlighting
 autocmd BufWritePre * :%s/\s\+$//e  " Automatically remove trailing spaces
-set formatoptions-=cro              " Disable automatically adding comments on new lines
 set laststatus=2                    " Always show status line
 " Tabs and indenting
 set tabstop=4                       " A tab is four spaces
@@ -40,6 +44,7 @@ Plugin 'powerline/fonts'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'leafgarland/typescript-vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -47,6 +52,18 @@ filetype plugin indent on
 
 " Airline configuration
 let g:airline_powerline_fonts = 1   " Automatically populate 'g:airline_symbols'
+
+" Syntastic configuration
+let g:syntastic_always_populate_loc_list = 1    " Tell Syntastic to always stick any detected errors into the 'location-list'
+let g:syntastic_auto_loc_list = 1               " Error window will be automatically opened when errors are detected, and closed when none are detected
+let g:syntastic_check_on_open = 1               " Run syntax checks when buffers are first loaded, as well as on saving
+let g:syntastic_check_on_wq = 0                 " Skip checks on :wq, :x, :ZZ
+
+" Typescript-vim configuration
+"autocmd FileType typescript :set makeprg=tsc
+"let g:typescript_indent_disable = 1 " Disable custom indenter
+"let g:typescript_compiler_binary = 'tsc'
+"let g:typescript_compiler_options = ''
 
 " Theme options
 colorscheme onedark                 " Set colorscheme
