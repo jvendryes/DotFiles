@@ -43,6 +43,7 @@ Plugin 'joshdick/onedark.vim'
 Plugin 'powerline/fonts'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'leafgarland/typescript-vim'
 
@@ -52,6 +53,7 @@ filetype plugin indent on
 
 " Airline configuration
 let g:airline_powerline_fonts = 1   " Automatically populate 'g:airline_symbols'
+let g:airline#extensions#tabline#enabled = 1    " Display all buffers as tabline
 
 " Syntastic configuration
 let g:syntastic_always_populate_loc_list = 1    " Tell Syntastic to always stick any detected errors into the 'location-list'
