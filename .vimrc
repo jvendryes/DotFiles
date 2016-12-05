@@ -48,7 +48,6 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'leafgarland/typescript-vim'
-" Plugin 'edkolev/tmuxline.vim'
 
 call vundle#end()
 filetype plugin indent on
