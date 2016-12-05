@@ -20,6 +20,7 @@ set textwidth=0                     " Disable 'textwidth'
 syntax on                           " Enable syntax highlighting
 autocmd BufWritePre * :%s/\s\+$//e  " Automatically remove trailing spaces
 set laststatus=2                    " Always show status line
+set hidden                          " Hide buffer instead of closing them
 " Tabs and indenting
 set tabstop=4                       " A tab is four spaces
 set smarttab                        " <TAB> key inserts indentation according to 'shiftwidth'
@@ -46,6 +47,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'leafgarland/typescript-vim'
+" Plugin 'edkolev/tmuxline.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -66,6 +68,12 @@ let g:syntastic_check_on_wq = 0                 " Skip checks on :wq, :x, :ZZ
 "let g:typescript_indent_disable = 1 " Disable custom indenter
 "let g:typescript_compiler_binary = 'tsc'
 "let g:typescript_compiler_options = ''
+
+" CtrlP configuration
+" Ignore the following files and directories
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$'
+    \ }
 
 " Theme options
 colorscheme onedark                 " Set colorscheme
