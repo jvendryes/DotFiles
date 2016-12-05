@@ -7,6 +7,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " General configuration
 set nocompatible                    " Ensure enhancements are turned on
 set t_Co=256                        " Force 256 colors in terminal
+set t_ut=                           " Fixes the background color in vim when using tmux (https://sunaku.github.io/vim-256color-bce.html)
 set noswapfile                      " Turn off swap files
 set number                          " Show line numbers
 set encoding=utf-8                  " Set encoding to UTF-8
@@ -63,12 +64,6 @@ let g:syntastic_auto_loc_list = 1               " Error window will be automatic
 let g:syntastic_check_on_open = 1               " Run syntax checks when buffers are first loaded, as well as on saving
 let g:syntastic_check_on_wq = 0                 " Skip checks on :wq, :x, :ZZ
 
-" Typescript-vim configuration
-"autocmd FileType typescript :set makeprg=tsc
-"let g:typescript_indent_disable = 1 " Disable custom indenter
-"let g:typescript_compiler_binary = 'tsc'
-"let g:typescript_compiler_options = ''
-
 " CtrlP configuration
 " Ignore the following files and directories
 let g:ctrlp_custom_ignore = {
@@ -79,4 +74,4 @@ let g:ctrlp_custom_ignore = {
 colorscheme onedark                 " Set colorscheme
 
 " Final configuration
-set secure                          " Harden VIM
+set secure                          " Harden vim
