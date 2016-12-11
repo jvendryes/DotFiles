@@ -10,8 +10,8 @@ set -o pipefail
 
 # Config files
 vimrc=".vimrc"
-bashrc=".bashrc"
-tmux_conf=".tmux.conf"
+#bashrc=".bashrc"
+#tmux_conf=".tmux.conf"
 
 # Set default values
 timestamp=$(date +%s) # Epoch time
@@ -22,8 +22,6 @@ read -p "Available install options:
 
 Config Files
     1) ${vimrc}
-    2) ${bashrc}
-    3) ${tmux_conf}
 
    99) All
 
@@ -46,24 +44,8 @@ function createBackup() {
     fi
 }
 
-# Installs the selected config
-function installConfig() {
-    file=$1
-
-    # Create symlink
-    echo "Creating symlink for ${file}..."
-    ln -s ${PWD}/${file} ~/${file}
-
-    # Check for symlink
-    if ! [ -L ~/${file} ] ; then
-        echo "Error: Symlink was not created, exiting..." >&2; exit 1
-    else
-        echo "Symlink (~/${file}) successfully created..."
-    fi
-}
-
 # Checks to see if the selected config already exists
-function checkConfig() {
+function checkForConfig() {
     file=$1
 
     # Does the file already exist?
@@ -82,6 +64,31 @@ function checkConfig() {
     fi
 }
 
+# Creates a symlink to the selected config
+function createSymlink() {
+    file=$1
+
+    # Create symlink
+    echo "Creating symlink for ${file}..."
+    ln -s ${PWD}/${file} ~/${file}
+
+    # Check for symlink
+    if ! [ -L ~/${file} ] ; then
+        echo "Error: Symlink was not created, exiting..." >&2; exit 1
+    else
+        echo "Symlink (~/${file}) successfully created..."
+    fi
+}
+
+# Installs the selected config
+function installConfig() {
+    file=$1
+
+    checkForConfig ${file}
+    createSymlink ${file}
+    echo "Installation of ~/${file} completed successfully!"
+}
+
 # What do you want to install?
 if ! [[ ${install_option} =~ ${re} ]] ; then
     echo "Error: Not a valid option..." >&2; exit 1 # User supplied unexpected input
@@ -92,12 +99,10 @@ else
     #    3) install_file=${tmux_config} ;;
         *) echo "Error: Invalid selection, exiting..." >&2; exit 1
     esac
-fi
 
-# Install selected config
-if [[ ${install_file} ]] ; then
-    checkConfig ${install_file}
-    installConfig ${install_file}
-    echo "Installation of ${install_file} completed successfully!"
+    # Install selected config
+    if [[ ${install_file} ]] ; then
+        installConfig ${install_file}
+    fi
 fi
 
