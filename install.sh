@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# TODO: Better solution for tying together config options, menus and installation
 # TODO: .tmux.conf solution
 # TODO: .bashrc solution
 # TODO: .gitconfig solution
@@ -21,10 +20,16 @@ re='^[1-9][0-9]*$' # Valid install options cannot start with 0
 
 # Config files
 vimrc=".vimrc"
-#bashrc=".bashrc"
-#tmux_conf=".tmux.conf"
-all_conf_files=(
-    ${vimrc}
+tmux_conf=".tmux.conf"
+bashrc=".bashrc"
+gitconfig=".gitconfig"
+
+# All config files
+declare -a all_conf_files=(
+    [1]=${vimrc}
+    [2]=${tmux_conf}
+    [3]=${bashrc}
+    [4]=${gitconfig}
 )
 
 # Prompt for install options
@@ -44,8 +49,11 @@ ${seperator}
 Config Files
 ${seperator}
 
-    1) ${vimrc}
-   99) All
+$(for i in "${!all_conf_files[@]}" ; do
+    echo "    ${i}) ${all_conf_files[${i}]}"
+done)
+
+   99) All Configs
 
 ${seperator}
 Enter a number: " install_option
@@ -135,10 +143,9 @@ function installConfigs() {
 if ! [[ ${install_option} =~ ${re} ]] ; then
     echo "${heading} | Error: Not a valid option..." >&2; exit 1 # User supplied unexpected input
 else
+    # Install options
     case ${install_option} in
-        1) install_files=("${vimrc}") ;;
-    #    2) install_files=("${bashrc}") ;;
-    #    3) install_files=("${tmux_config}") ;;
+        1|1[0-9]) install_files=("${all_conf_files[${install_option}]}") ;; # Options 1-19
         99) install_files=("${all_conf_files[@]}") ;;
         *) echo "${heading} | Error: Invalid selection, exiting..." >&2; exit 1
     esac
