@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# TODO: Heading as current file
 # TODO: Better solution for tying together config options, menus and installation
-# TODO: .bashrc solution
 # TODO: .tmux.conf solution
-# TODO: Better error handling and messaging
-# TODO: Make sure source file exists
+# TODO: .bashrc solution
+# TODO: .gitconfig solution
+# TODO: Better error handling
 
 # Script configuration
 # Exit if a command fails
@@ -15,7 +14,7 @@ set -o nounset
 set -o pipefail
 
 # Set default values
-heading="DotFile | "
+heading="DotFile"
 seperator="------------------------------------------------------------------------------"
 timestamp=$(date +%s) # Epoch time
 re='^[1-9][0-9]*$' # Valid install options cannot start with 0
@@ -52,20 +51,30 @@ ${seperator}
 Enter a number: " install_option
 echo "${seperator}"
 
+# Checks to see if source file exists before attempting install
+function checkForSourceFile() {
+    file=$1
+
+    # If source file does not exist
+    if ! [ -f ${PWD}/${file} ] ; then
+        echo "${file} | Source file does not exist, exiting..." >&2; exit 1
+    fi
+}
+
 # Create a backup of selected config
 function createBackup() {
     file=$1
     backup_file="${file}-${timestamp}.bak"
 
     # Create backup
-    echo "${heading}${file} is not a symlink, creating a backup..."
+    echo "${file} | File is not a symlink, creating a backup..."
     mv -f ~/${file} ~/${backup_file}
 
     # Check for backup
     if ! [ -f ~/${backup_file} ] ; then
-        echo "${heading}Error: Backup file was not created, exiting..." >&2; exit 1
+        echo "${heading} | Error: Backup file (~/${backup_file}) was not created, exiting..." >&2; exit 1
     else
-        echo "${heading}Backup file (~/${backup_file}) successfully created..."
+        echo "${file} | Backup file (~/${backup_file}) successfully created..."
     fi
 }
 
@@ -75,7 +84,7 @@ function checkForExistingConfig() {
 
     # Does the file already exist?
     if [ -f ~/${file} ] ; then
-        echo "${heading}${file} already exists..."
+        echo "${file} | File already exists..."
         # File already exists and is not a symlink
         if ! [ -L ~/${file} ] ; then
             # Create a backup of the existing file
@@ -83,7 +92,7 @@ function checkForExistingConfig() {
         fi
     else
         # The file does not already exist
-        echo "${heading}${file} does not currently exist, installing..."
+        echo "${file} | File does not currently exist, installing..."
     fi
 }
 
@@ -93,17 +102,17 @@ function createSymlink() {
 
     # Does the file already exist as a symlink?
     if [ -L ~/${file} ] ; then
-        echo "${heading}${file} already exists as a symlink, nothing more to do here..."
+        echo "${file} | File is already a symlink, skipping the install..."
     else
         # Create symlink
-        echo "${heading}Creating symlink for ${file}..."
+        echo "${file} | Creating symlink..."
         ln -s ${PWD}/${file} ~/${file}
 
         # Check for symlink
         if ! [ -L ~/${file} ] ; then
-            echo "${heading}Error: Symlink was not created, exiting..." >&2; exit 1
+            echo "${heading} | Error: Symlink was not created, exiting..." >&2; exit 1
         else
-            echo "${heading}Symlink (~/${file}) successfully created..."
+            echo "${file} | Symlink (~/${file}) successfully created..."
         fi
     fi
 }
@@ -114,30 +123,31 @@ function installConfigs() {
 
     # Install process
     for file in "${files[@]}" ; do
+        checkForSourceFile ${file}
         checkForExistingConfig ${file}
         createSymlink ${file}
-        echo "${heading}Installation of ~/${file} completed successfully!"
+        echo "${file} | Installation completed successfully!"
         echo "${seperator}"
     done
 }
 
 # What do you want to install?
 if ! [[ ${install_option} =~ ${re} ]] ; then
-    echo "${heading}Error: Not a valid option..." >&2; exit 1 # User supplied unexpected input
+    echo "${heading} | Error: Not a valid option..." >&2; exit 1 # User supplied unexpected input
 else
     case ${install_option} in
         1) install_files=("${vimrc}") ;;
     #    2) install_files=("${bashrc}") ;;
     #    3) install_files=("${tmux_config}") ;;
         99) install_files=("${all_conf_files[@]}") ;;
-        *) echo "${heading}Error: Invalid selection, exiting..." >&2; exit 1
+        *) echo "${heading} | Error: Invalid selection, exiting..." >&2; exit 1
     esac
 
     # Install config(s)
     if [[ -n ${install_files:-} ]] ; then
         installConfigs ${install_files[@]} # Array of install_files
     else
-        echo "${heading}Error: Something went terribly wrong, exiting..." >&2; exit 1
+        echo "${heading} | Error: Something went terribly wrong, exiting..." >&2; exit 1
     fi
 fi
 
