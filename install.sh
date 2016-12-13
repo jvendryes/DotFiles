@@ -3,6 +3,7 @@
 # TODO: .bashrc solution
 # TODO: .gitconfig solution
 # TODO: Better error handling
+# TODO: Install script for VIM
 
 # Script configuration
 # Exit if a command fails
@@ -53,7 +54,15 @@ $(for i in "${!all_conf_files[@]}" ; do
     echo "    ${i}) ${all_conf_files[${i}]}"
 done)
 
-   99) All Configs
+   10) All Configs
+
+${seperator}
+Install Scripts
+${seperator}
+
+   11) VIM
+
+   20) All Install Scripts
 
 ${seperator}
 Enter a number: " install_option
@@ -145,8 +154,10 @@ if ! [[ ${install_option} =~ ${re} ]] ; then
 else
     # Install options
     case ${install_option} in
-        1|1[0-9]) install_files=("${all_conf_files[${install_option}]}") ;; # Options 1-19
-        99) install_files=("${all_conf_files[@]}") ;;
+        [1-9]) install_files=("${all_conf_files[${install_option}]}") ;; # Options 1-9
+        10) install_files=("${all_conf_files[@]}") ;; # All configs
+        # [11-19]) install_scripts= ;; # Options 11-19
+        # 20) install_scripts= ;; # All install scripts
         *) echo "${heading} | Error: Invalid selection, exiting..." >&2; exit 1
     esac
 
