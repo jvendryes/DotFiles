@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# TODO: .tmux.conf solution
-# TODO: .bashrc solution
 # TODO: .gitconfig solution
 # TODO: Better error handling
 # TODO: Install script for VIM
@@ -13,25 +11,27 @@ set -o nounset
 # Exit status of the last command that threw a non-zero exit code
 set -o pipefail
 
-# Set default values
-heading="DotFile"
-seperator="------------------------------------------------------------------------------"
-timestamp=$(date +%s) # Epoch time
-re='^[1-9][0-9]*$' # Valid install options cannot start with 0
-
 # Config files
 vimrc=".vimrc"
-tmux_conf=".tmux.conf"
 bashrc=".bashrc"
+bash_profile=".bash_profile"
+tmux_conf=".tmux.conf"
 gitconfig=".gitconfig"
 
 # All config files
 declare -a all_conf_files=(
     [1]=${vimrc}
-    [2]=${tmux_conf}
-    [3]=${bashrc}
-    [4]=${gitconfig}
+    [2]=${bashrc}
+    [3]=${bash_profile}
+    [4]=${tmux_conf}
+    [5]=${gitconfig}
 )
+
+# Set default values
+heading="DotFile"
+seperator="------------------------------------------------------------------------------"
+timestamp=$(date +%s) # Epoch time
+install_options_re='^[1-9][0-9]*$' # Valid install options cannot start with 0
 
 # Prompt for install options
 read -p "
@@ -149,7 +149,7 @@ function installConfigs() {
 }
 
 # What do you want to install?
-if ! [[ ${install_option} =~ ${re} ]] ; then
+if ! [[ ${install_option} =~ ${install_options_re} ]] ; then
     echo "${heading} | Error: Not a valid option..." >&2; exit 1 # User supplied unexpected input
 else
     # Install options
