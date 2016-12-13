@@ -67,7 +67,7 @@ Install Scripts
 ${seperator}
 
 $(for i in "${!all_install_scripts[@]}" ; do
-    echo "    ${i}) ${all_install_scripts[${i}]}"
+    echo "   ${i}) ${all_install_scripts[${i}]}"
 done)
 
    20) All Install Scripts
