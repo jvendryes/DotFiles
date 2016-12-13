@@ -188,7 +188,7 @@ else
             install_files=("${all_conf_files[${install_option}]}") ;;
         10) # All configs
             install_files=("${all_conf_files[@]}") ;;
-        1[1-9]) # vim_install.sh
+        11) # vim_install.sh
             install_files=("${all_conf_files[1]}") # Install .vimrc
             install_scripts=("${all_install_scripts[${install_option}]}") ;;
         # 20) install_scripts= ;; # All install scripts
