@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # TODO: Better error handling
 # TODO: install_files and install_scripts should be done in a more scalable way
-# TODO: Better folder organization
 
 # Script configuration
 # Exit if a command fails
@@ -10,6 +9,14 @@ set -o errexit
 set -o nounset
 # Exit status of the last command that threw a non-zero exit code
 set -o pipefail
+
+# Set default values
+heading="DotFile"
+seperator="------------------------------------------------------------------------------"
+configs_dir="configs"
+scripts_dir="scripts"
+timestamp=$(date +%s) # Epoch time
+install_options_re='^[1-9][0-9]*$' # Valid install options cannot start with 0
 
 # Config files
 vimrc=".vimrc"
@@ -32,12 +39,6 @@ vim_install="vim_install.sh"
 declare -a all_install_scripts=(
     [11]=${vim_install}
 )
-
-# Set default values
-heading="DotFile"
-seperator="------------------------------------------------------------------------------"
-timestamp=$(date +%s) # Epoch time
-install_options_re='^[1-9][0-9]*$' # Valid install options cannot start with 0
 
 # Prompt for install options
 read -p "
@@ -78,10 +79,11 @@ echo "${seperator}"
 
 # Checks to see if source file exists before attempting install
 function checkForSourceFile() {
-    file=$1
+    directory=$1
+    file=$2
 
     # If source file does not exist
-    if ! [ -f ${PWD}/${file} ] ; then
+    if ! [ -f ${PWD}/${directory}/${file} ] ; then
         echo "${file} | Source file does not exist, exiting..." >&2; exit 1
     fi
 }
@@ -123,7 +125,8 @@ function checkForExistingConfig() {
 
 # Creates a symlink to the selected config
 function createSymlink() {
-    file=$1
+    directory=$1
+    file=$2
 
     # Does the file already exist as a symlink?
     if [ -L ${HOME}/${file} ] ; then
@@ -131,7 +134,7 @@ function createSymlink() {
     else
         # Create symlink
         echo "${file} | Creating symlink..."
-        ln -s ${PWD}/${file} ${HOME}/${file}
+        ln -s ${PWD}/${directory}/${file} ${HOME}/${file}
 
         # Check for symlink
         if ! [ -L ${HOME}/${file} ] ; then
@@ -144,10 +147,11 @@ function createSymlink() {
 
 # Runs the selected install script
 function runInstallScript() {
-    file=$1
+    directory=$1
+    file=$2
 
     # Executing install script
-    /usr/bin/env bash ${file}
+    /usr/bin/env bash ${directory}/${file}
 }
 
 # Installs the selected config(s)
@@ -156,9 +160,9 @@ function installConfigs() {
 
     # Install process
     for file in "${files[@]}" ; do
-        checkForSourceFile ${file}
+        checkForSourceFile ${configs_dir} ${file}
         checkForExistingConfig ${file}
-        createSymlink ${file}
+        createSymlink ${configs_dir} ${file}
         echo "${file} | Installation completed successfully!"
         echo "${seperator}"
     done
@@ -170,9 +174,9 @@ function installScripts() {
 
     # Install process
     for script in "${scripts[@]}" ; do
-        checkForSourceFile ${script}
+        checkForSourceFile ${scripts_dir} ${script}
         echo "${script} | Running script..."
-        runInstallScript ${script}
+        runInstallScript ${scripts_dir} ${script}
         echo "${script} | Script completed!"
         echo "${seperator}"
     done
