@@ -14,7 +14,7 @@ Tested on macOS Sierra (10.12), and CentOS 7.2.
 
 **Symbols aren't rendering in macOS when using iTerm2**
 
-I had to install a font (I like [Menlo for Powerline](https://github.com/abertsch/Menlo-for-Powerline)) on my system and set it within iTerm2 (I'm using 12pt for everything).
+I had to install a font (I like [Menlo for Powerline](https://github.com/abertsch/Menlo-for-Powerline)) on my system and set it within my terminal (I prefer [iTerm2](https://www.iterm2.com/)).
 
 ## Suggestions
 I'm always looking for feedback and happy to hear your suggestions!
