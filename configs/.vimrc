@@ -33,6 +33,11 @@ set backspace=indent,eol,start      " Define how backspacing works in insert mod
 set list                            " Make whitespace characters visible
 set listchars=tab:▷⋅,trail:⋅,nbsp:⋅ " Define whitespace characters
 
+" Allow shift-Tab in normal mode
+nnoremap <S-Tab> <<
+" Allow shift-tab in insert mode
+inoremap <S-Tab> <C-d>
+
 " Start Vundle
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
