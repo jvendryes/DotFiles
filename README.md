@@ -10,5 +10,11 @@ If you don't already have the [onedark theme](https://github.com/joshdick/onedar
 ### Compatibility
 Tested on macOS Sierra (10.12), and CentOS 7.2.
 
+## Troubleshooting
+
+**Symbols aren't rendering in macOS when using iTerm2**
+
+I had to install a font (I like [Menlo for Powerline](https://github.com/abertsch/Menlo-for-Powerline)) on my system and set it within iTerm2 (I'm using 12pt for everything).
+
 ## Suggestions
 I'm always looking for feedback and happy to hear your suggestions!
