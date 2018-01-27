@@ -53,6 +53,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'sheerun/vim-polyglot'
 
 call vundle#end()
 filetype plugin indent on
