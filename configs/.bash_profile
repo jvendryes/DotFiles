@@ -3,6 +3,11 @@ if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
 
+# Source .bash_profile_work
+if [ -f ~/.bash_profile_work ]; then
+    source ~/.bash_profile_work
+fi
+
 # Exports
 export TERM="xterm-256color"
 
